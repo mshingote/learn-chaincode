@@ -27,11 +27,12 @@ import (
 type SimpleChaincode struct {
 }
 type Patient struct {
-	ObjectType string        `json:"docType"` //field for couchdb
-	Name       string          `json:"name"`      //the fieldtags are needed to keep case from bouncing around
-	Age      int        `json:"age"`
-	Weight       float32           `json:"weight"`
-	Description      string `json:"description"`
+
+	ObjectType   string  `json:"docType"`    //field for couchdb
+	Name         string  `json:"name"`      //the fieldtags are needed to keep case from bouncing around
+	Age          int     `json:"age"`
+	Weight       float32 `json:"weight"`
+	Description  string  `json:"description"`
 }
 func main() {
 	err := shim.Start(new(SimpleChaincode))
