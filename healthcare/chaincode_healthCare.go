@@ -19,21 +19,33 @@ package main
 import (
 	"errors"
 	"fmt"
-
+	"encoding/json"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
-}
-type Patient struct {
 
-	ObjectType   string  `json:"docType"`    //field for couchdb
-	Name         string  `json:"name"`      //the fieldtags are needed to keep case from bouncing around
-	Age          int     `json:"age"`
-	Weight       float32 `json:"weight"`
-	Description  string  `json:"description"`
 }
+
+// Structure of Patient Details : Custom block
+
+type Patient struct {
+	Id    				string  `json:"Id"`
+	Name         			string  `json:"Name"`
+	Ailment 			string  `json:"Ailment"`
+	DateOfBirth 			string  `json:"DateOfBirth"`
+	NameOfLab       		string  `json:"NameOfLab"`
+	ReportType 			string  `json:"ReportType"`
+	Date				string  `json:"Date"`
+	Impression 			string  `json:"Impression"`
+	Finding 			string  `json:"Finding"`
+	Disease 			string  `json:"Disease"`
+	OnGoingMedication 		string  `json:"OnGoingMedication"`
+	Duration 			string  `json:"Duration"`
+	CurrentProblemDescription	string  `json:"CurrentProblemDescription"`
+}
+
 func main() {
 	err := shim.Start(new(SimpleChaincode))
 	if err != nil {
@@ -76,7 +88,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 
 	// Handle different functions
 	if function == "read" { //read a variable
-		return t.read(stub, args)
+		//return t.read(stub, args)
 	}
 	fmt.Println("query did not find func: " + function)
 
@@ -85,16 +97,38 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 
 // write - invoke function to write key/value pair
 func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var key, value string
 	var err error
 	fmt.Println("running write()")
 
-	if len(args) != 2 {
+	if len(args) != 13 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
 	}
 
-	key = args[0] //rename for funsies
-	value = args[1]
+	m_patient := &Patient{}
+
+	m_patient.Id 				= args[0]
+	m_patient.Name 				= args[1]
+	m_patient.Ailment			= args[2]
+	m_patient.DateOfBirth			= args[3]
+	m_patient.NameOfLab			= args[4]
+	m_patient.ReportType			= args[5]
+	m_patient.Date				= args[6]
+	m_patient.Impression			= args[7]
+	m_patient.Finding			= args[8]
+	m_patient.Disease			= args[9]
+	m_patient.OnGoingMedication		= args[10]
+	m_patient.Duration			= args[11]
+	m_patient.CurrentProblemDescription	= args[12]
+
+
+	var key = args[0] //rename for funsies
+
+	value, err := json.Marshal(&m_patient)
+
+	if err != nil {
+		return nil, err
+	}
+
 	err = stub.PutState(key, []byte(value)) //write the variable into the chaincode state
 	if err != nil {
 		return nil, err
@@ -102,6 +136,7 @@ func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string)
 	return nil, nil
 }
 
+/*
 // read - query function to read key/value pair
 func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, jsonResp string
@@ -117,6 +152,6 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
 		return nil, errors.New(jsonResp)
 	}
-
 	return valAsbytes, nil
 }
+*/
