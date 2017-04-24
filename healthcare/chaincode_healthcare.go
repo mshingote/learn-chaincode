@@ -195,9 +195,9 @@ func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) 
 
 // read - query function to read tripplet (cer, key+':'+uid)
 func (t *SimpleChaincode) readAssign(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	if len(args) != 2 {
+	/*if len(args) != 2 {
 		return nil, errors.New("Incorrect number of arguments. Expecting name of the key to query")
-	}
+	}*/
 
 	var cer, key, /*uid,*/ jsonResp string
 	var err error
