@@ -72,7 +72,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 }
 
 
-// Invoke isur entry point to invoke a chaincode function
+// Invoke is our entry point to invoke a chaincode function
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
 	//fmt.Println("invoke is running " + function)
@@ -120,9 +120,6 @@ func (t *SimpleChaincode) assign(stub shim.ChaincodeStubInterface, args []string
 	}
 	return nil, nil
 }
-
-
-//new write by aish : gender property added
 
 // write - invoke function to write key/value pair
 func (t *SimpleChaincode) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
